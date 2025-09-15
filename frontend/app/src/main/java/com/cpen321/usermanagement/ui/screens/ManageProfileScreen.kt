@@ -446,7 +446,7 @@ private fun ProfileFields(
             enabled = false
         )
 
-        Row(Modifier.focusProperties { canFocus = false }) {
+        Row(Modifier.focusProperties { canFocus = true }) { 
             OutlinedTextField(
                 value = data.bio,
                 onValueChange = data.onBioChange,
@@ -454,8 +454,7 @@ private fun ProfileFields(
                 placeholder = { Text(stringResource(R.string.bio_placeholder)) },
                 modifier = Modifier.fillMaxWidth(),
                 minLines = 3,
-                maxLines = 5,
-                readOnly = true
+                maxLines = 5
             )
         }
     }

@@ -201,4 +201,25 @@ class AuthRepositoryImpl @Inject constructor(
         }
         return false
     }
+
+    override suspend fun deleteAccount(): Result<Unit> {
+        val token = getStoredToken()
+        if (token == null) {
+            return Result.failure(Exception("No authentication token found"))
+        }
+        
+        val response = userInterface.deleteProfile("Bearer $token")
+        if (response.isSuccessful) {
+            clearToken()
+            return Result.success(Unit)
+        } else {
+            val errorBodyString = response.errorBody()?.string()
+            val errorMessage = JsonUtils.parseErrorMessage(
+                errorBodyString,
+                response.body()?.message ?: "Failed to delete account."
+            )
+            Log.e(TAG, "Delete account failed: $errorMessage")
+            return Result.failure(Exception(errorMessage))
+        }
+    }
 }
